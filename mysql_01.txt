@@ -1,0 +1,81 @@
+mysql 复习总结：
+    1> 进入mysql数据环境： mysql -h mysql所在的主机 -u 用户名 -p
+                                         localhost 代表本地的IP地址
+										 host 主机 -h
+										 username  用户名 -u
+										 password  密码   -p
+										 port   端口号    -P
+                                 eg :  mysql -h localhost -u root -p
+    2> 登入数据库的时候，查看数据库的版本（5.7版本） ：	select @@version;
+																						select version();
+	3>  常用的命令：	1. show databases;    // 查看所有数据库
+								2. use 数据库名;   // 进入指定的数据库
+								3. show tables;   // 查看所有表名
+								4. desc 表名称;   // 查看表结构
+								   show create database `表名`;  // 查看建表结构
+   4>  创建数据库：create database [if not exists] `数据库名` charset=字符的编码(utf8);
+                      eg:  create database study default character set utf8
+   5> 创建表:        create table 表名称(    字段名    字段类型   [约束],
+														 字段名    字段类型   [约束],
+														 字段名    字段类型   [约束],
+													   ....
+												   );engine=表引擎 charset=utf8 
+						eg: create table students(   
+									stuid int primary key auto_increment,
+									name varchar(20) not null,
+									sex char(10),
+									score double not null
+									);
+   6> 修改数据库字符集:  alter database `数据库名` charset=字符集选项;
+                               eg: alter database study charset = "utf8";
+   7>  这个是在建表的时候指定表引擎为myisam:engine=myisam charset=utf8;
+   8>  这个是在建表的时候指定表引擎为innodb:engine=innodb charset=utf8;
+   9>  表的操作：
+				   1 > 数据应用主键插入法： insert into 表名称(字段名1,字段名2,...)values(值1,值2,...),(值1,值2,...),...;
+										  eg : insert into  students (name,sex,score)values ("张三","男",98.5),("李四","男",78.6),("小花","女",69.5),("子琳","女",97.5);
+				   2> 数据应用值插入法 ： insert into 表名称 values(值1,值2,...),(值1,值2,...),...;
+										  eg : insert into  students values (1.'令狐冲','男',88),(2,'隆美尔','男',81), (3,'黄蓉','女',86);	
+				   3> 显示建表结构 :  show create  table students;  
+				   4> 删除表 : drop table school;  
+				   5> 查看表结构：desc `表名`;  
+				   6> 修改表名 :  alter table "old_name" rename "new_name";  
+								 eg : alter table students  rename class;
+				   7> 增加一个字段: 1> alter table `表名` add `字段名` 数据类型;  #thought(思想)
+															eg: alter table class  add thought varchar(50);
+											  2>将字段添加在表的第一个：alter table `表名` add  `字段名` 数据类型 first;
+															eg: alter table class  add   age int(4) first;
+											  3>#添加字段在指定字段的后面: alter table  `表名`  add '字段名' 数据类型  after `指定字段名` ;
+															eg :alter table class add height float  after age;
+				   8>修改字段属性: >alter table 表名称 change 字段名称 字段名称 字段类型 [是否允许非空];
+											>alter table 表名称 modify 字段名称 字段类型 [是否允许非空];
+								eg: alter table class modify  height int;
+								eg: alter table class change  height height float;
+				   9>修改字段名 :  >alter table `表名` change `原字段名` `新的字段名` 字段类型 ; #stature (身高)
+								eg: alter table class change  height stature float;
+				   10>修改字段的位置 >alter table user2 change `字段名` `改为新的字段名` char(16) after '字段名';
+							   eg: alter table  class change   stature  height  int  after thought;
+				   11>修改表的引擎：>alter table `表名` engine=innodb|myisam;
+				   12>移动表到指定数据库并改名为指定名称: >alter table `原表名` rename to "数据库.新表名";
+							   eg:alter table life rename to life.class;
+				   13>复制表: >create table `新表` select * from `原来的表`;
+							   eg: create table students select  * from  class ;
+							   特点:
+										1.旧表的数据会一起复制过来到新表中
+										2.不能复制主键
+									 >create table `新表` like `原来的表`;
+							   特点:
+										1.它可以复制主键
+										2.但是不会复制数据
+10 >  数据操作:
+				 1 > 数据应用主键插入法： insert into 表名称(字段名1,字段名2,...)values(值1,值2,...),(值1,值2,...),...;
+										  eg : insert into  students (name,sex,score)values ("张三","男",98.5),("李四","男",78.6),("小花","女",69.5),("子琳","女",97.5);
+				 2> 数据应用值插入法 ： insert into 表名称 values(值1,值2,...),(值1,值2,...),...;
+										 eg : insert into  students values (1.'令狐冲','男',88),(2,'隆美尔','男',81), (3,'黄蓉','女',86);	
+				 3> 修改数据:  update 表名 set 字段名='值',字段名=123 where 字段(一般使用主键)=值
+				                         eg: update class  set height =172  , thought = "小伙子思想健全良好"  where stuid =4;
+				 4> 删除数据:delete from 表名 where 字段(一般为主键)=值
+				                         eg: delete  from class  where stuid = 8;
+
+
+
+                           
